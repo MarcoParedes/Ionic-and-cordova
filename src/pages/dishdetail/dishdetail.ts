@@ -1,8 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ActionSheetController, ModalController } from 'ionic-angular';
 import { Dish } from '../../shared/dish';
 import { Comment } from '../../shared/comment';
 import { FavoriteProvider } from '../../providers/favorite/favorite';
+import { CommentPage } from '../comment/comment';
 
 /**
  * Generated class for the DishdetailPage page.
@@ -27,7 +28,10 @@ export class DishdetailPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     @Inject('BaseURL') private BaseURL,
     private favoriteservice: FavoriteProvider,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private actionSheetCtrl: ActionSheetController,
+    public modalCtrl: ModalController) {
+
       this.dish = navParams.get('dish');
       this.favorite = favoriteservice.isFavorite(this.dish.id);
       console.log(this.dish);
@@ -46,6 +50,40 @@ export class DishdetailPage {
       duration: 3000}).present();
   }
   
+
+  actionSheet() {
+    const actionSheet = this.actionSheetCtrl.create({
+      title: 'Select Actions',
+      buttons: [
+        {
+          text: 'Add to Favorite',
+          handler: () => {
+            this.addToFavorites();
+          }
+        },
+        {
+          text: 'Add Comment',
+          handler: () => {
+            let commentModal = this.modalCtrl.create(CommentPage, { comments: this.dish.comments });
+            commentModal.onDidDismiss(data => {
+              this.dish.comments.push(data);
+            });
+            commentModal.present();
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+
+    actionSheet.present();
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad DishdetailPage');
   }

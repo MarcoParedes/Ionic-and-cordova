@@ -7,6 +7,11 @@
 <ion-header>
 
   <ion-navbar color="primary">
+      <ion-buttons end>
+        <button ion-button icon-only (click)="actionSheet()">
+          <ion-icon name="more"></ion-icon>
+        </button>
+    </ion-buttons>
     <ion-title>Dish Details</ion-title>
   </ion-navbar>
 
@@ -15,6 +20,7 @@
 
 <ion-content padding>
   <ion-card *ngIf="dish">
+
     <img src="{{BaseURL + dish.image}}"/>
     <ion-card-content>
       <ion-card-title>
