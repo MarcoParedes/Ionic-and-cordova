@@ -35,7 +35,7 @@ export class CommentPage {
   }
 
   dismiss() {
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss(this.comments.value);
   }
 
   onSubmit() {
